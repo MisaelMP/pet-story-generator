@@ -1,0 +1,168 @@
+@import 'tailwindcss';
+
+/* Custom theme configuration using CSS variables */
+@theme {
+	--color-blue-50: #eff6ff;
+	--color-blue-500: #3b82f6;
+	--color-blue-600: #2563eb;
+	--color-blue-700: #1d4ed8;
+
+	--color-green-50: #f0fdf4;
+	--color-green-500: #22c55e;
+	--color-green-600: #16a34a;
+	--color-green-700: #15803d;
+
+	--color-red-50: #fef2f2;
+	--color-red-500: #ef4444;
+	--color-red-600: #dc2626;
+
+	--color-amber-50: #fffbeb;
+	--color-amber-500: #f59e0b;
+
+	--color-purple-100: #f3e8ff;
+	--color-purple-600: #9333ea;
+	--color-purple-700: #7c3aed;
+
+	--color-gray-50: #f9fafb;
+	--color-gray-100: #f3f4f6;
+	--color-gray-200: #e5e7eb;
+	--color-gray-300: #d1d5db;
+	--color-gray-400: #9ca3af;
+	--color-gray-500: #6b7280;
+	--color-gray-600: #4b5563;
+	--color-gray-700: #374151;
+	--color-gray-800: #1f2937;
+	--color-gray-900: #111827;
+
+	/* Custom animations */
+	--animate-spin: spin 1s linear infinite;
+}
+
+/* Base styles */
+@layer base {
+	* {
+		border-color: theme(colors.gray.200);
+	}
+
+	body {
+		background-color: theme(colors.gray.50);
+		color: theme(colors.gray.900);
+		font-feature-settings:
+			'rlig' 1,
+			'calt' 1;
+	}
+}
+
+/* Component styles */
+@layer components {
+	.form-input {
+		width: 100%;
+		padding: 0.75rem 1rem;
+		border: 1px solid theme(colors.gray.300);
+		border-radius: 0.5rem;
+		transition: all 0.2s;
+	}
+
+	.form-input:focus {
+		outline: none;
+		ring: 2px solid theme(colors.blue.500);
+		border-color: transparent;
+	}
+
+	.form-textarea {
+		width: 100%;
+		padding: 0.75rem 1rem;
+		border: 1px solid theme(colors.gray.300);
+		border-radius: 0.5rem;
+		resize: none;
+		transition: all 0.2s;
+	}
+
+	.form-textarea:focus {
+		outline: none;
+		ring: 2px solid theme(colors.blue.500);
+		border-color: transparent;
+	}
+
+	.btn-primary {
+		padding: 0.75rem 1.5rem;
+		background-color: theme(colors.blue.600);
+		color: white;
+		border-radius: 0.5rem;
+		transition: background-color 0.2s;
+	}
+
+	.btn-primary:hover:not(:disabled) {
+		background-color: theme(colors.blue.700);
+	}
+
+	.btn-primary:disabled {
+		background-color: theme(colors.gray.400);
+		cursor: not-allowed;
+	}
+
+	.btn-secondary {
+		padding: 0.75rem 1.5rem;
+		background-color: theme(colors.gray.200);
+		color: theme(colors.gray.700);
+		border-radius: 0.5rem;
+		transition: background-color 0.2s;
+	}
+
+	.btn-secondary:hover:not(:disabled) {
+		background-color: theme(colors.gray.300);
+	}
+
+	.btn-secondary:disabled {
+		background-color: theme(colors.gray.100);
+		cursor: not-allowed;
+	}
+
+	.card {
+		background-color: white;
+		border-radius: 0.75rem;
+		box-shadow:
+			0 10px 15px -3px rgb(0 0 0 / 0.1),
+			0 4px 6px -4px rgb(0 0 0 / 0.1);
+		padding: 1.5rem;
+	}
+
+	.error-text {
+		color: theme(colors.red.600);
+		font-size: 0.875rem;
+		margin-top: 0.25rem;
+	}
+}
+
+/* Utility styles */
+@layer utilities {
+	.loading-overlay {
+		backdrop-filter: blur(4px);
+	}
+}
+
+/* Custom scrollbar */
+.overflow-y-auto::-webkit-scrollbar {
+	width: 6px;
+}
+
+.overflow-y-auto::-webkit-scrollbar-track {
+	background: #f1f1f1;
+	border-radius: 3px;
+}
+
+.overflow-y-auto::-webkit-scrollbar-thumb {
+	background: #c1c1c1;
+	border-radius: 3px;
+}
+
+.overflow-y-auto::-webkit-scrollbar-thumb:hover {
+	background: #a8a8a8;
+}
+
+/* Keyframes for animations */
+@keyframes spin {
+	to {
+		transform: rotate(360deg);
+	}
+}
