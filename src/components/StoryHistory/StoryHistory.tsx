@@ -49,8 +49,6 @@ export const StoryHistory: React.FC<StoryHistoryProps> = ({
 				storiesData = await StoryService.getAllStories();
 			}
 			setStories(storiesData);
-			console.log(`Loaded ${storiesData.length} stories`);
-
 			// Debug: Log first few stories and their pet IDs
 			if (storiesData.length > 0) {
 				console.log(
@@ -122,7 +120,6 @@ export const StoryHistory: React.FC<StoryHistoryProps> = ({
 					});
 
 					setPets(mockPets);
-					console.log('Created mock pets for testing:', mockPets.length);
 				}
 			}
 		} catch (err) {
