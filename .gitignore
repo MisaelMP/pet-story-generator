@@ -35,6 +35,11 @@ dist-ssr
 build/
 .cache/
 
+# TypeScript
+*.tsbuildinfo
+tsconfig.tsbuildinfo
+vite.config.d.ts
+
 # IDE
 .vscode/
 .idea/# Vite cache

@@ -16,7 +16,7 @@ export const storyFormSchema = z.object({
 			.min(1, 'Please provide estimated cost')
 			.max(100000, 'Maximum cost is $100,000'),
 		urgency: z.enum(['immediate', 'urgent', 'planned'], {
-			error: 'Please select urgency level',
+			required_error: 'Please select urgency level',
 		}),
 	}),
 

@@ -1,5 +1,10 @@
 import apiClient from './api.service';
-import { Pet } from '../types/pet.types';
+import {
+	Pet,
+	RawPIMSPet,
+	PIMSApiResponse,
+	MedicalRecord,
+} from '../types/pet.types';
 
 export class PetService {
 	private static readonly ENDPOINTS = {
@@ -20,7 +25,7 @@ export class PetService {
 				typeof error === 'object' &&
 				error !== null &&
 				'code' in error &&
-				(error as any).code === 'ENOTFOUND'
+				(error as { code: string }).code === 'ENOTFOUND'
 			) {
 				throw new Error('Unable to connect to backend server.');
 			}
@@ -28,7 +33,7 @@ export class PetService {
 				typeof error === 'object' &&
 				error !== null &&
 				'response' in error &&
-				(error as any).response?.status === 502
+				(error as { response?: { status?: number } }).response?.status === 502
 			) {
 				throw new Error('Backend cannot reach veterinary system.');
 			}
@@ -47,10 +52,12 @@ export class PetService {
 		}
 	}
 
-	// NEW: Enhanced data parsing for unknown PIMS format
-	private static normalizePetData(rawData: any): Pet[] {
+	// Enhanced data parsing for unknown PIMS format
+	private static normalizePetData(
+		rawData: PIMSApiResponse | RawPIMSPet[]
+	): Pet[] {
 		// Handle different possible response formats
-		let petsArray: any[];
+		let petsArray: RawPIMSPet[];
 
 		if (Array.isArray(rawData)) {
 			petsArray = rawData;
@@ -60,7 +67,7 @@ export class PetService {
 			petsArray = rawData.patients;
 		} else {
 			console.warn('Unexpected data format:', rawData);
-			petsArray = [rawData]; // Treat as single pet
+			petsArray = [rawData as RawPIMSPet]; // Treat as single pet
 		}
 
 		return petsArray.map((pet) => ({
@@ -77,24 +84,26 @@ export class PetService {
 				email: this.extractOwnerEmail(pet),
 				phone: this.extractOwnerPhone(pet),
 			},
-			medicalHistory: this.extractMedicalHistory(pet),
+			medicalHistory: this.extractMedicalHistory(pet) as
+				| MedicalRecord[]
+				| undefined,
 			createdAt: this.extractCreatedAt(pet),
 			updatedAt: this.extractUpdatedAt(pet),
 		}));
 	}
 
 	// Flexible field extraction methods
-	private static extractId(pet: any): string {
+	private static extractId(pet: RawPIMSPet): string {
 		return String(pet.id || pet.patient_id || pet.petId || 'unknown');
 	}
 
-	private static extractName(pet: any): string {
+	private static extractName(pet: RawPIMSPet): string {
 		return (
 			pet.Name || pet.name || pet.patient_name || pet.petName || 'Unnamed Pet'
 		);
 	}
 
-	private static extractSpecies(pet: any): string {
+	private static extractSpecies(pet: RawPIMSPet): string {
 		return (
 			pet.SpeciesDescription ||
 			pet.Species ||
@@ -105,7 +114,7 @@ export class PetService {
 		);
 	}
 
-	private static extractBreed(pet: any): string {
+	private static extractBreed(pet: RawPIMSPet): string {
 		return (
 			pet.BreedDescription ||
 			pet.Breed ||
@@ -115,12 +124,13 @@ export class PetService {
 		);
 	}
 
-	private static calculateAge(pet: any): number {
+	private static calculateAge(pet: RawPIMSPet): number {
 		if (pet.age && typeof pet.age === 'number') return pet.age;
+		if (pet.Age && typeof pet.Age === 'number') return pet.Age;
 
 		// Handle PIMS DateOfBirth field
-		const birthDate = pet.DateOfBirth || pet.birth_date || pet.birthDate;
-		if (birthDate) {
+		const birthDate = pet.DateOfBirth || pet.birth_date || pet.BirthDate;
+		if (birthDate && typeof birthDate === 'string') {
 			const birth = new Date(birthDate);
 			const today = new Date();
 			return Math.floor(
@@ -130,53 +140,46 @@ export class PetService {
 		return 0;
 	}
 
-	private static extractWeight(pet: any): number | undefined {
-		// Handle PIMS CurrentWeight field
-		const weight = pet.CurrentWeight || pet.weight || pet.weight_kg;
+	private static extractWeight(pet: RawPIMSPet): number | undefined {
+		const weight = pet.Weight || pet.weight || pet.weight_kg;
 		return weight ? Number(weight) : undefined;
 	}
 
-	private static extractPhoto(pet: any): string | undefined {
-		return pet.photo || pet.photo_url || pet.image;
+	private static extractPhoto(pet: RawPIMSPet): string | undefined {
+		return (pet.photo || pet.image || pet.profile_image) as string | undefined;
 	}
 
-	private static extractOwnerId(pet: any): string {
-		return String(pet.owner_id || pet.client_id || 'unknown');
+	private static extractOwnerId(pet: RawPIMSPet): string {
+		return String(pet.owner_id || pet.OwnerId || 'unknown');
 	}
 
-	private static extractOwnerName(pet: any): string {
-		return (
-			pet.owner_name || pet.client_name || pet.owner?.name || 'Unknown Owner'
-		);
+	private static extractOwnerName(pet: RawPIMSPet): string {
+		return (pet.owner_name || pet.OwnerName || 'Unknown Owner') as string;
 	}
 
-	private static extractOwnerEmail(pet: any): string {
-		return pet.owner_email || pet.client_email || pet.owner?.email || '';
+	private static extractOwnerEmail(pet: RawPIMSPet): string {
+		return (pet.owner_email || pet.OwnerEmail || '') as string;
 	}
 
-	private static extractOwnerPhone(pet: any): string {
-		return pet.owner_phone || pet.client_phone || pet.owner?.phone || '';
+	private static extractOwnerPhone(pet: RawPIMSPet): string {
+		return (pet.owner_phone || pet.OwnerPhone || '') as string;
 	}
 
-	private static extractMedicalHistory(pet: any): any[] {
-		return pet.medical_history || pet.medical_records || [];
+	private static extractMedicalHistory(pet: RawPIMSPet): unknown[] {
+		return (pet.medical_history ||
+			pet.MedicalHistory ||
+			pet.medicalRecords ||
+			[]) as unknown[];
 	}
 
-	private static extractCreatedAt(pet: any): string {
-		// Handle PIMS APICreateDate and EnteredDate fields
-		const createdDate =
-			pet.APICreateDate ||
-			pet.EnteredDate ||
-			pet.created_at ||
-			pet.date_created;
-		return createdDate || new Date().toISOString();
+	private static extractCreatedAt(pet: RawPIMSPet): string {
+		const createdDate = pet.created_at || pet.CreatedAt;
+		return (createdDate as string) || new Date().toISOString();
 	}
 
-	private static extractUpdatedAt(pet: any): string {
-		// Handle PIMS APILastChangeDate field
-		const updatedDate =
-			pet.APILastChangeDate || pet.updated_at || pet.date_modified;
-		return updatedDate || new Date().toISOString();
+	private static extractUpdatedAt(pet: RawPIMSPet): string {
+		const updatedDate = pet.updated_at || pet.UpdatedAt;
+		return (updatedDate as string) || new Date().toISOString();
 	}
 
 	private static normalizeSpecies(species: string): Pet['species'] {
