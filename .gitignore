@@ -44,3 +44,4 @@ vite.config.d.ts
 .vscode/
 .idea/# Vite cache
 .vite/
+.vercel
