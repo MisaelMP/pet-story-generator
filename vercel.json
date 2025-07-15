@@ -7,7 +7,7 @@
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "https://your-backend-app.herokuapp.com/api/$1"
+      "destination": "https://your-actual-heroku-app.herokuapp.com/api/$1"
     },
     {
       "source": "/(.*)",
