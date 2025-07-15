@@ -83,37 +83,56 @@ export class PetService {
 		}));
 	}
 
-	// NEW: Flexible field extraction methods
+	// Flexible field extraction methods
 	private static extractId(pet: any): string {
 		return String(pet.id || pet.patient_id || pet.petId || 'unknown');
 	}
 
 	private static extractName(pet: any): string {
-		return pet.name || pet.patient_name || pet.petName || 'Unnamed Pet';
+		return (
+			pet.Name || pet.name || pet.patient_name || pet.petName || 'Unnamed Pet'
+		);
 	}
 
 	private static extractSpecies(pet: any): string {
-		return pet.species || pet.animal_type || pet.type || 'other';
+		return (
+			pet.SpeciesDescription ||
+			pet.Species ||
+			pet.species ||
+			pet.animal_type ||
+			pet.type ||
+			'other'
+		);
 	}
 
 	private static extractBreed(pet: any): string {
-		return pet.breed || pet.breed_name || 'Mixed Breed';
+		return (
+			pet.BreedDescription ||
+			pet.Breed ||
+			pet.breed ||
+			pet.breed_name ||
+			'Mixed Breed'
+		);
 	}
 
 	private static calculateAge(pet: any): number {
 		if (pet.age && typeof pet.age === 'number') return pet.age;
-		if (pet.birth_date || pet.birthDate) {
-			const birthDate = new Date(pet.birth_date || pet.birthDate);
+
+		// Handle PIMS DateOfBirth field
+		const birthDate = pet.DateOfBirth || pet.birth_date || pet.birthDate;
+		if (birthDate) {
+			const birth = new Date(birthDate);
 			const today = new Date();
 			return Math.floor(
-				(today.getTime() - birthDate.getTime()) / (365.25 * 24 * 60 * 60 * 1000)
+				(today.getTime() - birth.getTime()) / (365.25 * 24 * 60 * 60 * 1000)
 			);
 		}
 		return 0;
 	}
 
 	private static extractWeight(pet: any): number | undefined {
-		const weight = pet.weight || pet.weight_kg;
+		// Handle PIMS CurrentWeight field
+		const weight = pet.CurrentWeight || pet.weight || pet.weight_kg;
 		return weight ? Number(weight) : undefined;
 	}
 
@@ -144,11 +163,20 @@ export class PetService {
 	}
 
 	private static extractCreatedAt(pet: any): string {
-		return pet.created_at || pet.date_created || new Date().toISOString();
+		// Handle PIMS APICreateDate and EnteredDate fields
+		const createdDate =
+			pet.APICreateDate ||
+			pet.EnteredDate ||
+			pet.created_at ||
+			pet.date_created;
+		return createdDate || new Date().toISOString();
 	}
 
 	private static extractUpdatedAt(pet: any): string {
-		return pet.updated_at || pet.date_modified || new Date().toISOString();
+		// Handle PIMS APILastChangeDate field
+		const updatedDate =
+			pet.APILastChangeDate || pet.updated_at || pet.date_modified;
+		return updatedDate || new Date().toISOString();
 	}
 
 	private static normalizeSpecies(species: string): Pet['species'] {

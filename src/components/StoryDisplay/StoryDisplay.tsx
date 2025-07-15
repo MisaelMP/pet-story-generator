@@ -1,7 +1,7 @@
 // src/components/StoryDisplay/StoryDisplay.tsx
 import React, { useState } from 'react';
 import { GeneratedStory } from '../../services/ai.service';
-import { Copy, Download, Edit, RefreshCw, Share } from 'lucide-react';
+import { Copy, Download, Edit, RefreshCw } from 'lucide-react';
 
 interface StoryDisplayProps {
 	story: GeneratedStory;
@@ -39,28 +39,30 @@ export const StoryDisplay: React.FC<StoryDisplayProps> = ({
 	};
 
 	return (
-		<div className='max-w-4xl mx-auto p-6'>
-			<div className='bg-white rounded-2xl shadow-xl overflow-hidden'>
+		<div className='w-full max-w-4xl mx-auto p-4 sm:p-6'>
+			<div className='bg-white rounded-xl sm:rounded-2xl shadow-lg sm:shadow-xl overflow-hidden'>
 				{/* Header */}
-				<div className='bg-gradient-to-r from-blue-600 to-purple-600 text-white p-6'>
-					<h2 className='text-2xl font-bold mb-2'>Your Generated Story</h2>
-					<p className='opacity-90'>
+				<div className='bg-gradient-to-r from-blue-600 to-purple-600 text-white p-4 sm:p-6'>
+					<h2 className='text-xl sm:text-2xl font-bold mb-2'>
+						Your Generated Story
+					</h2>
+					<p className='opacity-90 text-sm sm:text-base'>
 						Review and customize your fundraising campaign
 					</p>
 				</div>
 
 				{/* Story Content */}
-				<div className='p-8'>
+				<div className='p-4 sm:p-6 lg:p-8'>
 					<div className='mb-6'>
-						<h3 className='text-3xl font-bold text-gray-900 mb-4'>
+						<h3 className='text-2xl sm:text-3xl font-bold text-gray-900 mb-4 leading-tight'>
 							{story.title}
 						</h3>
 
 						{/* Story Metadata */}
-						<div className='flex flex-wrap gap-4 mb-6 text-sm text-gray-600'>
+						<div className='flex flex-col sm:flex-row sm:flex-wrap gap-2 sm:gap-4 mb-6 text-xs sm:text-sm text-gray-600'>
 							<span className='flex items-center gap-1'>
 								<div
-									className={`w-3 h-3 rounded-full ${
+									className={`w-3 h-3 rounded-full flex-shrink-0 ${
 										story.tone === 'emotional'
 											? 'bg-red-400'
 											: story.tone === 'hopeful'
@@ -77,7 +79,7 @@ export const StoryDisplay: React.FC<StoryDisplayProps> = ({
 						</div>
 
 						{/* Story Text */}
-						<div className='prose prose-lg max-w-none mb-8'>
+						<div className='prose prose-sm sm:prose lg:prose-lg max-w-none mb-6 sm:mb-8'>
 							<div className='bg-gray-50 rounded-lg p-6 leading-relaxed text-gray-800 whitespace-pre-line'>
 								{story.content}
 							</div>
@@ -103,10 +105,14 @@ export const StoryDisplay: React.FC<StoryDisplayProps> = ({
 					</div>
 
 					{/* Action Buttons */}
-					<div className='flex flex-wrap gap-4 justify-center border-t pt-6'>
+					<div className='flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center border-t pt-4 sm:pt-6'>
 						<button
 							onClick={handleCopyToClipboard}
-							className='flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors'
+							className={`flex items-center justify-center gap-2 px-4 sm:px-6 py-2 sm:py-3 rounded-lg transition-colors text-sm sm:text-base ${
+								copiedToClipboard
+									? 'bg-green-600 text-white'
+									: 'bg-blue-600 text-white hover:bg-blue-700'
+							}`}
 						>
 							<Copy className='w-4 h-4' />
 							{copiedToClipboard ? 'Copied!' : 'Copy Text'}
@@ -114,30 +120,35 @@ export const StoryDisplay: React.FC<StoryDisplayProps> = ({
 
 						<button
 							onClick={handleDownload}
-							className='flex items-center gap-2 px-6 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors'
+							className='flex items-center justify-center gap-2 px-4 sm:px-6 py-2 sm:py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors text-sm sm:text-base'
 						>
 							<Download className='w-4 h-4' />
 							Download
 						</button>
 
-						<div className='flex gap-2'>
+						<div className='flex flex-col sm:flex-row gap-2'>
 							{(['emotional', 'hopeful', 'urgent'] as const).map((tone) => (
 								<button
 									key={tone}
 									onClick={() => onRegenerate(tone)}
 									disabled={isRegenerating}
-									className={`flex items-center gap-2 px-4 py-3 rounded-lg transition-colors ${
+									className={`flex items-center justify-center gap-2 px-3 sm:px-4 py-2 sm:py-3 rounded-lg transition-colors text-xs sm:text-sm ${
 										story.tone === tone
 											? 'bg-purple-600 text-white'
 											: 'bg-purple-100 text-purple-700 hover:bg-purple-200'
 									} disabled:opacity-50`}
 								>
 									{isRegenerating ? (
-										<RefreshCw className='w-4 h-4 animate-spin' />
+										<RefreshCw className='w-3 h-3 sm:w-4 sm:h-4 animate-spin' />
 									) : (
-										<Edit className='w-4 h-4' />
+										<Edit className='w-3 h-3 sm:w-4 sm:h-4' />
 									)}
-									{tone.charAt(0).toUpperCase() + tone.slice(1)} tone
+									<span className='hidden sm:inline'>
+										{tone.charAt(0).toUpperCase() + tone.slice(1)} tone
+									</span>
+									<span className='sm:hidden'>
+										{tone.charAt(0).toUpperCase() + tone.slice(1)}
+									</span>
 								</button>
 							))}
 						</div>

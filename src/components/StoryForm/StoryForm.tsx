@@ -5,6 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import type { StoryFormData } from '../../types/form.types';
 import { storyFormSchema } from '../../types/form.types';
 import type { FormStep } from '../../types/form.types';
+import type { Pet } from '../../types/pet.types';
 import { PetSelectionStep } from './steps/PetSelectionStep';
 import { MedicalSituationStep } from './steps/MedicalSituationStep';
 import { PetStoryStep } from './steps/PetStoryStep';
@@ -51,7 +52,7 @@ export const StoryForm: React.FC<StoryFormProps> = ({ onSubmit, pets }) => {
 	const {
 		handleSubmit,
 		trigger,
-		formState: { errors, isValid },
+		formState: { isValid },
 	} = methods;
 
 	const validateCurrentStep = async (): Promise<boolean> => {
@@ -99,12 +100,17 @@ export const StoryForm: React.FC<StoryFormProps> = ({ onSubmit, pets }) => {
 	};
 
 	return (
-		<div className='max-w-4xl mx-auto p-6'>
-			<ProgressIndicator currentStep={currentStep} totalSteps={4} />
+		<div className='w-full max-w-4xl mx-auto p-4 sm:p-6'>
+			<div className='mb-6 sm:mb-8'>
+				<ProgressIndicator currentStep={currentStep} totalSteps={4} />
+			</div>
 
 			<FormProvider {...methods}>
-				<form onSubmit={handleSubmit(handleFormSubmit)} className='space-y-8'>
-					<div className='bg-white rounded-2xl shadow-xl p-8 min-h-[500px]'>
+				<form
+					onSubmit={handleSubmit(handleFormSubmit)}
+					className='space-y-6 sm:space-y-8'
+				>
+					<div className='bg-white rounded-xl sm:rounded-2xl shadow-lg sm:shadow-xl p-4 sm:p-6 lg:p-8 min-h-[400px] sm:min-h-[500px]'>
 						{renderCurrentStep()}
 					</div>
 

@@ -13,20 +13,19 @@ export interface GeneratedStory {
 }
 
 interface AIResponse {
-	content: string | Record<string, unknown>;
+	story: {
+		title: string;
+		content: string;
+		tone: string;
+		suggestedGoal: number;
+		keyPoints: string[];
+	};
 	usage?: {
 		total_tokens?: number;
 	};
 	model?: string;
-}
-
-interface ParsedAIContent {
-	title?: string;
-	content?: string;
-	suggestedGoal?: number;
-	tone?: string;
-	keyPoints?: string[];
-	estimatedReadTime?: number;
+	savedToXano?: boolean;
+	timestamp?: string;
 }
 
 export class AIStoryService {
@@ -176,24 +175,30 @@ Format your response as JSON:
 
 	private static parseAIResponse(response: AIResponse): GeneratedStory {
 		try {
-			// Parse the AI response safely
-			const parsed: ParsedAIContent =
-				typeof response.content === 'string'
-					? JSON.parse(response.content)
-					: (response.content as ParsedAIContent);
+			// The backend returns the story data in a 'story' property
+			const storyData = response.story;
+
+			if (!storyData) {
+				throw new Error('No story data in response');
+			}
 
 			return {
-				title: parsed.title || 'Help Save Our Beloved Pet',
-				content: parsed.content || 'Story generation failed. Please try again.',
-				suggestedGoal: parsed.suggestedGoal || 5000,
-				tone: this.validateTone(parsed.tone),
-				keyPoints: Array.isArray(parsed.keyPoints)
-					? parsed.keyPoints
+				title: storyData.title || 'Help Save Our Beloved Pet',
+				content:
+					storyData.content || 'Story generation failed. Please try again.',
+				suggestedGoal: storyData.suggestedGoal || 5000,
+				tone: this.validateTone(storyData.tone),
+				keyPoints: Array.isArray(storyData.keyPoints)
+					? storyData.keyPoints
 					: ['Medical treatment needed', 'Financial assistance required'],
-				estimatedReadTime: parsed.estimatedReadTime || 3,
+				estimatedReadTime: Math.max(
+					1,
+					Math.ceil((storyData.content || '').split(' ').length / 200)
+				),
 			};
 		} catch (error) {
 			console.error('Failed to parse AI response:', error);
+			console.error('Response data:', response);
 			throw new Error('Invalid response format from AI service');
 		}
 	}

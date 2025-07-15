@@ -9,11 +9,13 @@ import {
 import { PetService } from './services/pet.service';
 import { Pet } from './types/pet.types';
 import { StoryFormData } from './types/form.types';
+import { GeneratedStory } from './services/ai.service';
 import { useStoryGenerator } from './hooks/useStoryGenerator';
 import { Header } from './components/Layout/Header';
 import { PetAnalytics } from './components/PetAnalytics';
 import { StoryForm } from './components/StoryForm/StoryForm';
 import { StoryDisplay } from './components/StoryDisplay/StoryDisplay';
+import { StoryHistory, RecentStoriesWidget } from './components/StoryHistory';
 import { LoadingSpinner } from './components/UI/LoadingSpinner';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import './App.css';
@@ -107,24 +109,31 @@ export default function App() {
 				<div className='min-h-screen bg-gray-50'>
 					<Header onStartOver={handleStartOver} />
 
-					<main className='container mx-auto px-4 py-8'>
+					<main className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8'>
 						<Routes>
 							<Route path='/' element={<Navigate to='/dashboard' replace />} />
 
 							<Route
 								path='/dashboard'
 								element={
-									<div className='space-y-8'>
-										<div className='text-center'>
-											<h1 className='text-4xl font-bold text-gray-900 mb-4'>
+									<div className='space-y-6 sm:space-y-8'>
+										<div className='text-center px-4'>
+											<h1 className='text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-3 sm:mb-4'>
 												Pet Story Generator
 											</h1>
-											<p className='text-xl text-gray-600 max-w-3xl mx-auto'>
+											<p className='text-base sm:text-lg lg:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed'>
 												Transform veterinary data into compelling fundraising
 												stories that drive successful GoFundMe campaigns.
 											</p>
 										</div>
-										<PetAnalytics pets={pets} />
+										<div className='grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8'>
+											<div className='lg:col-span-2 min-w-0'>
+												<PetAnalytics pets={pets} />
+											</div>
+											<div className='lg:col-span-1 min-w-0'>
+												<RecentStoriesWidget maxStories={3} />
+											</div>
+										</div>
 									</div>
 								}
 							/>
@@ -132,43 +141,60 @@ export default function App() {
 							<Route
 								path='/create-story'
 								element={
-									currentStory ? (
-										<StoryDisplay
-											story={currentStory}
-											onRegenerate={handleRegenerate}
-											isRegenerating={isRegenerating}
-										/>
-									) : (
-										<div>
-											{isGenerating && (
-												<div className='fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50'>
-													<div className='bg-white rounded-lg p-8 text-center'>
-														<LoadingSpinner
-															size='large'
-															message='Generating your story...'
-														/>
-														<p className='text-gray-600 mt-4'>
-															Our AI is crafting a compelling narrative for your
-															pet's campaign.
-														</p>
+									<div className='min-h-[calc(100vh-120px)]'>
+										{currentStory ? (
+											<div className='max-w-4xl mx-auto'>
+												<StoryDisplay
+													story={currentStory}
+													onRegenerate={handleRegenerate}
+													isRegenerating={isRegenerating}
+												/>
+											</div>
+										) : (
+											<div>
+												{isGenerating && (
+													<div className='fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4'>
+														<div className='bg-white rounded-lg p-6 sm:p-8 text-center max-w-md w-full mx-4'>
+															<LoadingSpinner
+																size='large'
+																message='Generating your story...'
+															/>
+															<p className='text-gray-600 mt-4 text-sm sm:text-base'>
+																Our AI is crafting a compelling narrative for
+																your pet's campaign.
+															</p>
+														</div>
 													</div>
+												)}
+
+												<div className='max-w-4xl mx-auto'>
+													<StoryForm onSubmit={handleFormSubmit} pets={pets} />
 												</div>
-											)}
 
-											<StoryForm onSubmit={handleFormSubmit} pets={pets} />
-
-											{storyError && (
-												<div className='max-w-4xl mx-auto mt-6'>
-													<div className='bg-red-50 border border-red-200 rounded-lg p-4'>
-														<h4 className='text-red-800 font-semibold mb-2'>
-															Generation Failed
-														</h4>
-														<p className='text-red-700'>{storyError}</p>
+												{storyError && (
+													<div className='max-w-4xl mx-auto mt-6'>
+														<div className='bg-red-50 border border-red-200 rounded-lg p-4'>
+															<h4 className='text-red-800 font-semibold mb-2'>
+																Generation Failed
+															</h4>
+															<p className='text-red-700 text-sm sm:text-base'>
+																{storyError}
+															</p>
+														</div>
 													</div>
-												</div>
-											)}
-										</div>
-									)
+												)}
+											</div>
+										)}
+									</div>
+								}
+							/>
+
+							<Route
+								path='/story-history'
+								element={
+									<div className='max-w-7xl mx-auto'>
+										<StoryHistory />
+									</div>
 								}
 							/>
 
