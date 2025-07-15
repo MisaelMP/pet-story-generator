@@ -37,4 +37,5 @@ build/
 
 # IDE
 .vscode/
-.idea/
+.idea/# Vite cache
+.vite/
