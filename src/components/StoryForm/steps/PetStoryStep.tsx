@@ -1,6 +1,6 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
-import { StoryFormData } from '../../../types/form.types';
+import { StoryFormData } from '@/types/form.types';
 import { Heart, Camera, Users, MessageCircle } from 'lucide-react';
 
 export const PetStoryStep: React.FC = () => {

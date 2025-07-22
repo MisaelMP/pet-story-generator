@@ -1,8 +1,8 @@
 // src/hooks/useStoryGenerator.ts
 import { useState, useCallback } from 'react';
-import { StoryFormData } from '../types/form.types';
-import { Pet } from '../types/pet.types';
-import { AIStoryService, GeneratedStory } from '../services/ai.service';
+import { StoryFormData } from '@/types/form.types';
+import { Pet } from '@/types/pet.types';
+import { AIStoryService, GeneratedStory } from '@/services/ai.service';
 
 export const useStoryGenerator = () => {
 	const [currentStory, setCurrentStory] = useState<GeneratedStory | null>(null);

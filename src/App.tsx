@@ -5,18 +5,18 @@ import {
 	Route,
 	Navigate,
 } from 'react-router-dom';
-import { PetService } from './services/pet.service';
-import { Pet } from './types/pet.types';
-import { StoryFormData } from './types/form.types';
-import { GeneratedStory } from './services/ai.service';
-import { useStoryGenerator } from './hooks/useStoryGenerator';
-import { Header } from './components/Layout/Header';
-import { PetAnalytics } from './components/PetAnalytics';
-import { StoryForm } from './components/StoryForm/StoryForm';
-import { StoryDisplay } from './components/StoryDisplay/StoryDisplay';
-import { StoryHistory, RecentStoriesWidget } from './components/StoryHistory';
-import { LoadingSpinner } from './components/UI/LoadingSpinner';
-import { ErrorBoundary } from './components/ErrorBoundary';
+import { PetService } from '@/services/pet.service';
+import { Pet } from '@/types/pet.types';
+import { StoryFormData } from '@/types/form.types';
+import { GeneratedStory } from '@/services/ai.service';
+import { useStoryGenerator } from '@/hooks/useStoryGenerator';
+import { Header } from '@/components/Layout/Header';
+import { PetAnalytics } from '@/components/PetAnalytics';
+import { StoryForm } from '@/components/StoryForm/StoryForm';
+import { StoryDisplay } from '@/components/StoryDisplay/StoryDisplay';
+import { StoryHistory, RecentStoriesWidget } from '@/components/StoryHistory';
+import { LoadingSpinner } from '@/components/UI/LoadingSpinner';
+import { ErrorBoundary } from '@/components/ErrorBoundary';
 import './App.css';
 
 export default function App() {

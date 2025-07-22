@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { StoredStory } from '../../types/story.types';
-import { Pet } from '../../types/pet.types';
-import { StoryService } from '../../services/story.service';
-import { PetService } from '../../services/pet.service';
+import { StoredStory } from '@/types/story.types';
+import { Pet } from '@/types/pet.types';
+import { StoryService } from '@/services/story.service';
+import { PetService } from '@/services/pet.service';
 import {
 	Calendar,
 	Trash2,
@@ -16,7 +16,7 @@ import {
 	Clock,
 	RefreshCw,
 } from 'lucide-react';
-import { LoadingSpinner } from '../UI/LoadingSpinner';
+import { LoadingSpinner } from '@/components/UI/LoadingSpinner';
 
 interface StoryHistoryProps {
 	selectedPetId?: string;

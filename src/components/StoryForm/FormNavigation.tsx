@@ -1,6 +1,6 @@
 import React from 'react';
 import { ChevronLeft, ChevronRight, Send, Loader2 } from 'lucide-react';
-import type { FormStep } from '../../types/form.types';
+import type { FormStep } from '@/types/form.types';
 
 interface FormNavigationProps {
 	currentStep: FormStep;

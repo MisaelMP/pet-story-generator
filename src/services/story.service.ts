@@ -1,11 +1,11 @@
 import axios from 'axios';
 import type { GeneratedStory } from './ai.service';
-import type { StoryFormData } from '../types/form.types';
+import type { StoryFormData } from '@/types/form.types';
 import type {
 	CreateStoryPayload,
 	StoredStory,
 	XanoStoryResponse,
-} from '../types/story.types';
+} from '@/types/story.types';
 
 const xanoClient = axios.create({
 	baseURL: import.meta.env.VITE_XANO_BASE_URL,

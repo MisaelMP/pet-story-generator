@@ -1,6 +1,6 @@
 import apiClient from './api.service';
-import type { StoryFormData } from '../types/form.types';
-import type { Pet } from '../types/pet.types';
+import type { StoryFormData } from '@/types/form.types';
+import type { Pet } from '@/types/pet.types';
 import { StoryService } from './story.service';
 
 export interface GeneratedStory {

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
-import type { StoryFormData } from '../../../types/form.types';
+import type { StoryFormData } from '@/types/form.types';
 import { AlertCircle, Calendar, DollarSign, Clock } from 'lucide-react';
 
 export const MedicalSituationStep: React.FC = () => {
