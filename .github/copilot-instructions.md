@@ -109,6 +109,7 @@ npm run lint         # ESLint code quality checks
 ```
 
 ### Path Aliases
+
 - `@/` - **ACTIVELY USED** alias for `./src/` directory (e.g., `import { Pet } from '@/types/pet.types'`)
 - All cross-directory imports use the `@/` alias for cleaner, maintainable code
 - Local/sibling file imports still use relative paths (e.g., `'./ComponentName'`)
@@ -217,6 +218,7 @@ npm run lint         # ESLint code quality checks
 The GitHub Copilot instructions have been analyzed against the actual repository structure and are **100% accurate**. The frontend codebase matches exactly with the documented architecture:
 
 ### Confirmed Components & Structure
+
 - ✅ Multi-step form with 4 steps (Pet Selection, Medical Situation, Pet Story, Financial Situation)
 - ✅ React 19 + TypeScript + Vite 7 + Tailwind CSS 4 stack
 - ✅ Service layer architecture (ai, api, pet, story services)
@@ -226,6 +228,7 @@ The GitHub Copilot instructions have been analyzed against the actual repository
 - ✅ Error boundaries and analytics components present
 
 ### Recent Updates Applied
+
 - Updated technology stack versions to match `package.json`
 - Added Lucide React for iconography
 - Included path alias configuration (`@/` for `./src/`)
