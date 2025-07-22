@@ -11,7 +11,7 @@ import {
 	Pie,
 	Cell,
 } from 'recharts';
-import type { Pet } from '../types/pet.types';
+import type { Pet } from '@/types/pet.types';
 
 interface PetAnalyticsProps {
 	pets: Pet[];

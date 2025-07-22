@@ -1,6 +1,6 @@
 // src/components/StoryDisplay/StoryDisplay.tsx
 import React, { useState } from 'react';
-import { GeneratedStory } from '../../services/ai.service';
+import { GeneratedStory } from '@/services/ai.service';
 import { Copy, Download, Edit, RefreshCw } from 'lucide-react';
 
 interface StoryDisplayProps {

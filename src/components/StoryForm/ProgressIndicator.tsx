@@ -1,6 +1,6 @@
 import React from 'react';
 import { Check } from 'lucide-react';
-import type { FormStep } from '../../types/form.types';
+import type { FormStep } from '@/types/form.types';
 
 interface ProgressIndicatorProps {
 	currentStep: FormStep;

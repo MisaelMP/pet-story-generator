@@ -2,10 +2,10 @@
 import React, { useState } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import type { StoryFormData } from '../../types/form.types';
-import { storyFormSchema } from '../../types/form.types';
-import type { FormStep } from '../../types/form.types';
-import type { Pet } from '../../types/pet.types';
+import type { StoryFormData } from '@/types/form.types';
+import { storyFormSchema } from '@/types/form.types';
+import type { FormStep } from '@/types/form.types';
+import type { Pet } from '@/types/pet.types';
 import { PetSelectionStep } from './steps/PetSelectionStep';
 import { MedicalSituationStep } from './steps/MedicalSituationStep';
 import { PetStoryStep } from './steps/PetStoryStep';

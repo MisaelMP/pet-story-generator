@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { StoredStory } from '../../types/story.types';
-import { Pet } from '../../types/pet.types';
-import { StoryService } from '../../services/story.service';
-import { PetService } from '../../services/pet.service';
+import { StoredStory } from '@/types/story.types';
+import { Pet } from '@/types/pet.types';
+import { StoryService } from '@/services/story.service';
+import { PetService } from '@/services/pet.service';
 import { Calendar, Eye, Heart, DollarSign, ArrowRight } from 'lucide-react';
-import { LoadingSpinner } from '../UI/LoadingSpinner';
+import { LoadingSpinner } from '@/components/UI/LoadingSpinner';
 
 interface RecentStoriesWidgetProps {
 	maxStories?: number;

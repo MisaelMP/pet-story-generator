@@ -1,8 +1,8 @@
 // src/components/StoryForm/steps/PetSelectionStep.tsx
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
-import type { StoryFormData } from '../../../types/form.types';
-import type { Pet } from '../../../types/pet.types';
+import type { StoryFormData } from '@/types/form.types';
+import type { Pet } from '@/types/pet.types';
 import { Search, Heart } from 'lucide-react';
 
 interface PetSelectionStepProps {

@@ -4,7 +4,7 @@ import {
 	RawPIMSPet,
 	PIMSApiResponse,
 	MedicalRecord,
-} from '../types/pet.types';
+} from '@/types/pet.types';
 
 export class PetService {
 	private static readonly ENDPOINTS = {
